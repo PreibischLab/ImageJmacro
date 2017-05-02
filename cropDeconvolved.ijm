@@ -25,7 +25,7 @@ for (i = 0; i < filenames.length; i++){
 		// progress bar
 		showProgress(i + 1, filenames.length);
 		iFile = input + filenames[i];
-        open(iFile);
+		open(iFile);
 	
 		// all images to deconvolve have the different size in z-axis
 		zDim = nSlices - (halfPsfDims[2]*2 + 1);

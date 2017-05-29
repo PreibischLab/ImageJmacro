@@ -26,39 +26,44 @@ Array.sort(filenames);
 for (iFile = 0; iFile < filenames.length; ++iFile){
 	img = input + filenames[iFile];
 	filename = filenames[iFile];
-	// image path
-	print(img);
-	// get the metadata of the file
-	Ext.setId(img);
-	// get the number of images (series)
-	Ext.getSeriesCount(nSeries);
-	
-	// count number of leading zeros
-	numZeros = 0;
-	tmp = nSeries;
-	while (tmp > 0){
-		tmp = floor(tmp / 10);
-		numZeros++;
-	}
-	
-	// iterate over all images in the series
-	for (iSeries = 1; iSeries <= nSeries; iSeries++){
-		print("Processing series #" + iSeries);
-		run("Bio-Formats Importer", "open=[" + img + "] color_mode=Default view=Hyperstack stack_order=XYCZT series_" + iSeries);
-		// choose series
-		Ext.setSeries(iSeries - 1);
-		
-		// single series omage should be processed separetely
-		if (nSeries == 1){
-			title = filename;
-		}
-		else{
-			title = filename + " - " + filename + " (series " + IJ.pad(iSeries, numZeros) + ")";
-		}
 
-		print(title);
-		selectWindow(title);	
-		saveAs("Tiff", output + title + ".tif");	
-		showProgress(iSeries, nSeries);
-	}		
+	// work only on the nd2 files
+	if (endsWith(filename, ".nd2")){
+		// image path
+		print(img);
+		// get the metadata of the file
+		Ext.setId(img);
+		// get the number of images (series)
+		Ext.getSeriesCount(nSeries);
+		
+		// count number of leading zeros
+		numZeros = 0;
+		tmp = nSeries;
+		while (tmp > 0){
+			tmp = floor(tmp / 10);
+			numZeros++;
+		}
+		
+		// iterate over all images in the series
+		for (iSeries = 1; iSeries <= nSeries; iSeries++){
+			print("Processing series #" + iSeries);
+			run("Bio-Formats Importer", "open=[" + img + "] color_mode=Default view=Hyperstack stack_order=XYCZT series_" + iSeries);
+			// choose series
+			Ext.setSeries(iSeries - 1);
+			
+			// single series omage should be processed separetely
+			if (nSeries == 1){
+				title = filename;
+			}
+			else{
+				title = filename + " - " + filename + " (series " + IJ.pad(iSeries, numZeros) + ")";
+			}
+	
+			print(title);
+			selectWindow(title);	
+			saveAs("Tiff", output + title + ".tif");	
+			// close("*.nd2");
+			showProgress(iSeries, nSeries);
+		}		
+	}
 } 

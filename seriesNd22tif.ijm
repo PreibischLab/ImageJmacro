@@ -62,7 +62,7 @@ for (iFile = 0; iFile < filenames.length; ++iFile){
 			print(title);
 			selectWindow(title);	
 			saveAs("Tiff", output + title + ".tif");	
-			// close("*.nd2");
+			Ext.close("*.nd2");
 			showProgress(iSeries, nSeries);
 		}		
 	}

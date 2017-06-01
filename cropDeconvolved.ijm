@@ -39,3 +39,5 @@ for (i = 0; i < filenames.length; i++){
 		saveAs("Tiff", substring(oFile, 0, lengthOf(oFile) - 10));	
 	}
 }
+
+print("DOGE!");

@@ -3,7 +3,7 @@
 selectWindow(getTitle());
 
 run("Duplicate...",  "duplicate title=[new name 1]");
-// adjust the intensity of the initial image
+// adjust the intensity of the initial imageS
 Stack.getStatistics(voxelCount, mean, min, max, stdDev);
 run("Subtract...", "value=" + min + " stack");
 run("Divide...", "value=" + (max - min) + " stack");

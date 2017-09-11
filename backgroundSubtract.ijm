@@ -1,14 +1,11 @@
-// resave the 16-bit images as 32-bit
+// subtract the background
 
 // Close all open tif's 
 close("*.tif");
 
-// Define Input Folder
+// Define the folder with files
 // root folder 
-input = getDirectory("Select a Directory for import");
-// Define Output Folder
-// subtracted folder 
-output = getDirectory("Select a Directory for output"); // "/Users/kkolyva/Desktop/test_f/d/";
+folder = getDirectory("Select a Directory for import");
 
 setBatchMode(true);
 
@@ -16,36 +13,43 @@ medianRad = 10; // size of the median filter
 
 // only 3 first channels are considered
 for(j = 0; j < 3; j++){
-	channelInput  = input + "channels/c" + (j + 1) + "/";  // this is the folder for each channel
-	medianInput   = input + "median/c" + (j + 1) + "/";  // this is the folder for each channel
-	channelOutput = output+ "subtracted/c" + (j + 1) + "/";
+	channelInput  = folder + "channels/c" + (j + 1) + "/";  // this is the folder for each channel
+	medianInput   = folder + "median/c" + (j + 1) + "/";  // this is the folder for each channel
+	channelOutput = folder+ "subtracted/c" + (j + 1) + "/";
+
+	// print(channelInput);
+	// print(medianInput);
 	
 	cFilenames = getFileList(channelInput);
 	mFilenames = getFileList(medianInput);
-	Array.sort(cFilenames);
-	
-/*
-	for (i = 0; i < filenames.length; i++){	
-		// work only on the tif files in the input folder
-		if (endsWith(filenames[i], ".tif")){
+		
+	for (i = 0; i < cFilenames.length; i++){	
+		// work only on the tif files in the input folders
+		if (endsWith(cFilenames[i], ".tif")){
 			// show which file we are processing
-			// print(filenames[i]);
+			// print(cFilenames[i]);
 			// progress bar
-			showProgress(i + 1, filenames.length);
-			iFile = channelInput + filenames[i];
-
-			print (iFile);
+			showProgress(i + 1, cFilenames.length);
+			icFile = channelInput + cFilenames[i]; // path
+			imFile = medianInput  + mFilenames[i]; // path
 			
-			open(iFile);
+			// print(icFile);
+			open(icFile); 
+			// initial images are 16-bit
+			run("32-bit"); 
+			open(imFile);
+			
+			imageCalculator("Subtract create 32-bit stack", cFilenames[i], mFilenames[i]);
 
-			run("32-bit");
-			run("Median...", "radius=" + medianRad + " stack");
+			Stack.getStatistics(voxelCount, mean, min, max, stdDev);
+			run("Add...", "value=" + (-1*min) + " stack");
 
-			oFile = channelOutput + filenames[i];
-			saveAs("Tiff", substring(oFile, 0, lengthOf(oFile) - 4));	
-			close();
+			ocFile = channelOutput + cFilenames[i];
+			saveAs("Tiff", substring(ocFile, 0, lengthOf(ocFile) - 4));	
+			// Close all open tif's 
+			close("*.tif");
 		}
-	} */
+	}
 }
 
 /*

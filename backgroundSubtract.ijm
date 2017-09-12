@@ -16,12 +16,13 @@ for(j = 0; j < 3; j++){
 	channelInput  = folder + "channels/c" + (j + 1) + "/";  // this is the folder for each channel
 	medianInput   = folder + "median/c" + (j + 1) + "/";  // this is the folder for each channel
 	channelOutput = folder+ "subtracted/c" + (j + 1) + "/";
-
-	// print(channelInput);
-	// print(medianInput);
 	
 	cFilenames = getFileList(channelInput);
 	mFilenames = getFileList(medianInput);
+
+	// might be useless 
+	Array.sort(cFilenames);
+	Array.sort(mFilenames);
 		
 	for (i = 0; i < cFilenames.length; i++){	
 		// work only on the tif files in the input folders
@@ -33,7 +34,9 @@ for(j = 0; j < 3; j++){
 			icFile = channelInput + cFilenames[i]; // path
 			imFile = medianInput  + mFilenames[i]; // path
 			
-			// print(icFile);
+			print(icFile);
+			print(imFile);
+			
 			open(icFile); 
 			// initial images are 16-bit
 			run("32-bit"); 
@@ -51,14 +54,5 @@ for(j = 0; j < 3; j++){
 		}
 	}
 }
-
-/*
-Stack.getStatistics(voxelCount, mean, min, max, stdDev);
-run("Subtract...", "value=" + min + " stack");
-run("Divide...", "value=" + (max - min) + " stack");
-
-print(min + " " + max);
-*/
-
 
 print("DOGE!");

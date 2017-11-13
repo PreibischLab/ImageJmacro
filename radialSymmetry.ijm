@@ -23,9 +23,9 @@ maxError=0.4;
 inlierRatio=0.25;
 
 // Define Input Folder
-input = "/Users/kkolyva/Desktop/rs-test/input/"; // getDirectory("Select a Directory for import");
+input = getDirectory("Select a Directory for import");
 // Define Output Folder
-output = "/Users/kkolyva/Desktop/rs-test/output/"; // getDirectory("Select a Directory for output");
+output = getDirectory("Select a Directory for output");
 //Get list of files
 filenames = getFileList(input);
 // images are not shown
@@ -65,7 +65,6 @@ for (i = 0; i < filenames.length; i++){
 	// "logservice=[org.scijava.log.StderrLogService [priority = -100.0]] "
 	// "commandservice=[org.scijava.command.DefaultCommandService [priority = 0.0]] "
 	);
-	
 	// save the result table
 	oFile = output + filenames[i];	
 	saveAs("Results", substring(oFile, 0, lengthOf(oFile) - 4) + ".csv"); 

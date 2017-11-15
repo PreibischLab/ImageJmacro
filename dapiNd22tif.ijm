@@ -28,8 +28,8 @@ for (i = 0; i < filenames.length; i++){
  		title = substring(filenames[i], 0, lengthOf(filenames[i]) - 4); //Removes .nd2 at the end
 	
 		// DAPI is always the third channel (0-index!)
-		DAPI_index = 2;
-		selectWindow(filename + " - C=" + DAPI_index);
+		DAPI_index = 4;
+		selectWindow(filenames[i] + " - C=" + DAPI_index);
 		DAPI_name = title + " - C=" + DAPI_index + ".tif";
 		saveAs("Tiff", output + DAPI_name);
 		// close(); // don't need in the batch mode

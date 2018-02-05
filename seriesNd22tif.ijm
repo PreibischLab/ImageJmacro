@@ -1,5 +1,5 @@
-// save DAPI channel from the series files each of them 
-// is the stack with 5 channels in tif format
+// resave each series from the .nd file 
+// output: the stack with 5 channels in tif format
 
 // Close all open tif's 
 close("*.tif");
@@ -51,18 +51,24 @@ for (iFile = 0; iFile < filenames.length; ++iFile){
 			// choose series
 			Ext.setSeries(iSeries - 1);
 			
-			// single series omage should be processed separetely
+			// single series image should be processed separetely
 			if (nSeries == 1){
 				title = filename;
+				outFilename = substring(filename, 0, lengthOf(filename) - 4) + "-(series " + IJ.pad(iSeries, numZeros) + ")"; 
 			}
 			else{
 				title = filename + " - " + filename + " (series " + IJ.pad(iSeries, numZeros) + ")";
+				outFilename = substring(filename, 0, lengthOf(filename) - 4) + "-(series " + IJ.pad(iSeries, numZeros) + ")"; 
 			}
 	
-			print(title);
+			print("Title: " + title);
+			print("Output filename: " + outFilename);
+			 
 			selectWindow(title);	
-			saveAs("Tiff", output + title + ".tif");	
+			saveAs("Tiff", output + outFilename + ".tif");	
 			Ext.close();
+			// this close looks necessary, hm 
+			close();
 			showProgress(iSeries, nSeries);
 		}		
 	}

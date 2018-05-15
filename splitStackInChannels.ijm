@@ -26,7 +26,8 @@ for (i = 0; i < filenames.length; i++){
 		run("Split Channels");
 		// close all channels
 		for (j = 0; j < channels; j++){
-			oFile = output + "C" + (j + 1) + "-" + filenames[i];
+			title = getTitle();
+			oFile = output + title;
 			Stack.setDimensions(1, slices, 1); // is this legit ? 
 			run("32-bit"); 
 			saveAs("Tiff", oFile);	

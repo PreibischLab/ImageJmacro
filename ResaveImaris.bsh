@@ -1,3 +1,10 @@
+// written by Stephan Preibisch & Friedrich Preusser
+// Berlin, 11 Apr 2019
+
+// We ran into the problem that Fiji/BioFormats is not able to open our .ims files acquired with the Andor Fusion software version 2.0 (i.e. our Dragonfly spinning disk).
+// It looks like the problem occurs only if files are bigger than ca. 3GB.
+// This script enables re-saving of individual timepoints from the .ims as tiffs, which can then be handled in Fiji again.
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -18,8 +25,42 @@ import mpicbg.spim.data.sequence.ViewId;
 import net.imglib2.RandomAccessibleInterval;
 import net.imglib2.img.display.imagej.ImageJFunctions;
 
-// written by Stephan Preibisch & Friedrich Preusser
-// Berlin, 11 Apr 2019
+GenericDialogPlus gd = new GenericDialogPlus( "Save options" );
+
+gd.addFileField( "Select Imaris file", "", 100 );
+
+gd.showDialog();
+if ( gd.wasCanceled() )
+	return;
+
+File file = new File( gd.getNextString() );
+
+if ( !file.exists() )
+{
+	IJ.log( "File " + file + " does not exist." );ble to open our .ims files acquired with the Andor Fusion software version 2.0 (i.e. our Dragonfly spinning disk).
+// It looks like this happens only to .ims file bigger than ca. 3GB.
+// This script enables re-saving of the individual timepoints as tiffs, which can then be handled in Fiji again.
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import bdv.img.imaris.Imaris;
+import bdv.spimdata.SpimDataMinimal;
+import bdv.spimdata.XmlIoSpimDataMinimal;
+import fiji.util.gui.GenericDialogPlus;
+import ij.IJ;
+import ij.ImageJ;
+import ij.ImagePlus;
+import ij.io.FileSaver;
+import mpicbg.spim.data.SpimDataException;
+import mpicbg.spim.data.generic.sequence.BasicImgLoader;
+import mpicbg.spim.data.generic.sequence.BasicViewSetup;
+import mpicbg.spim.data.sequence.TimePoint;
+import mpicbg.spim.data.sequence.ViewId;
+import net.imglib2.RandomAccessibleInterval;
+import net.imglib2.img.display.imagej.ImageJFunctions;
+
 GenericDialogPlus gd = new GenericDialogPlus( "Save options" );
 
 gd.addFileField( "Select Imaris file", "", 100 );

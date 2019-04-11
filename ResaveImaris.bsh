@@ -28,7 +28,7 @@ gd.showDialog();
 if ( gd.wasCanceled() )
 	return;
 
-final File file = new File( gd.getNextString() );
+File file = new File( gd.getNextString() );
 
 if ( !file.exists() )
 {
@@ -56,15 +56,15 @@ if ( spimData == null )
 // display
 //BigDataViewer.open( spimData, "test", new ProgressWriterIJ(), ViewerOptions.options() );
 
-final List< BasicViewSetup > viewSetups = spimData.getSequenceDescription().getViewSetupsOrdered();
-final List< TimePoint > timepoints = spimData.getSequenceDescription().getTimePoints().getTimePointsOrdered();
+List viewSetups = spimData.getSequenceDescription().getViewSetupsOrdered();
+List timepoints = spimData.getSequenceDescription().getTimePoints().getTimePointsOrdered();
 
 IJ.log( "Found " + viewSetups.size() + " viewsetups." );
 IJ.log( "Found " + timepoints.size() + " timepoints." );
 
 gd = new GenericDialogPlus( "Save options" );
 
-gd.addDirectoryField( "Directory", file.getPath(), 50 );
+gd.addDirectoryField( "Directory", file.getParent(), 50 );
 
 if ( timepoints.size() > 1 )
 {
@@ -76,9 +76,9 @@ gd.showDialog();
 if ( gd.wasCanceled() )
 	return;
 
-final String saveDir = defaultDir = gd.getNextString();
+String saveDir = defaultDir = gd.getNextString();
 
-final int startTp, endTp;
+int startTp, endTp;
 
 if ( timepoints.size() > 1 )
 {
@@ -90,29 +90,27 @@ else
 	startTp = endTp = timepoints.get( 0 ).getId();
 }
 
-final BasicImgLoader imgLoader = spimData.getSequenceDescription().getImgLoader();
+BasicImgLoader imgLoader = spimData.getSequenceDescription().getImgLoader();
 
-for ( final TimePoint tp : timepoints )
+for ( TimePoint tp : timepoints )
 {
 	if ( tp.getId() >= startTp && tp.getId() <= endTp )
 	{
 		IJ.log( "Exporting timepoint " + tp.getId() );
 
-		for ( final BasicViewSetup vs : viewSetups )
+		for ( BasicViewSetup vs : viewSetups )
 		{
 			IJ.log( "Exporting viewsetup " + vs.getId() );
-			final ViewId v = new ViewId( tp.getId(), vs.getId() );
+			ViewId v = new ViewId( tp.getId(), vs.getId() );
 
 			if ( spimData.getSequenceDescription().getViewDescriptions().get( v ).isPresent() )
 			{
-				final RandomAccessibleInterval img = imgLoader.getSetupImgLoader( vs.getId() ).getImage( tp.getId() );
-				final ImagePlus imp = ImageJFunctions.wrap( img, "tp_" + tp.getId() + "_vs_" + vs.getId() );
-				final String saveFile =  new File( saveDir, imp.getTitle() ).getAbsolutePath() + ".tif";
+				RandomAccessibleInterval img = imgLoader.getSetupImgLoader( vs.getId() ).getImage( tp.getId(), 0, null );
+				ImagePlus imp = ImageJFunctions.wrap( img, "tp_" + tp.getId() + "_vs_" + vs.getId() );
+				String saveFile =  new File( saveDir, imp.getTitle() ).getAbsolutePath() + ".tif";
 				new FileSaver( imp ).saveAsTiffStack( saveFile );
 
 				IJ.log( "Saved file " + saveFile );
-
-				//SimpleMultiThreading.threadHaltUnClean();
 			}
 			else
 			{
